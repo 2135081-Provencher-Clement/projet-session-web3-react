@@ -30,7 +30,7 @@ function ListeElements() {
             </Stack>
             <span>&nbsp;</span>
             <Typography variant="h6" textAlign="left">Éléments</Typography>
-            <Stack spacing={1} direction="column" divider={<Divider orientation="horizontal" flexItem />} paddingTop={3}>
+            <Stack spacing={1} direction="column" divider={<Divider orientation="horizontal" flexItem />} paddingTop={3} width={500}>
                 {elementItems}
             </Stack>
         </>

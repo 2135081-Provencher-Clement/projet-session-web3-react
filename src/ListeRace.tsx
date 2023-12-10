@@ -31,7 +31,7 @@ function ListeRace() {
             </Stack>
             <span>&nbsp;</span>
             <Typography variant="h6" textAlign="left">Races</Typography>
-            <Stack spacing={1} direction="column" divider={<Divider orientation="horizontal" flexItem />} paddingTop={2}>
+            <Stack spacing={1} direction="column" divider={<Divider orientation="horizontal" flexItem />} paddingTop={2} width={500}>
                 {raceItems}
             </Stack>
         </>

@@ -1,5 +1,7 @@
 import { Divider, Stack, Typography } from '@mui/material';
 import { NavLink } from 'react-router-dom';
+import MonstreVictorieux from './MonstreVictorieux';
+import MonstrePopulaire from './MonstrePopulaire';
 
 function Acceuil() {
 
@@ -13,6 +15,11 @@ function Acceuil() {
                 <NavLink to="/Monstre">Monstres</NavLink>
                 <NavLink to="/Race">Races</NavLink>
                 <NavLink to="/Element">Éléments</NavLink>
+            </Stack>
+            <Typography variant="h4" paddingTop={10}>Tableau d'honneur</Typography>
+            <Stack direction="row" justifyContent="center" spacing={7} paddingTop={3}>
+                <MonstreVictorieux/>
+                <MonstrePopulaire/>
             </Stack>
         </Stack>
     )

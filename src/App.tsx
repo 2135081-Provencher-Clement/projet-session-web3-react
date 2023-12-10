@@ -88,8 +88,7 @@ function App() {
         return false; // Élément non trouvé
   
       const nouveauElements = elements?.filter(elementDuTableau => elementDuTableau._id !== element._id);
-      const elementModifie = { ...elementAModifier, nom: element.nom };
-      nouveauElements?.push(elementModifie);
+      nouveauElements?.push(element);
       setElements(nouveauElements);
   
       return true
@@ -239,10 +238,33 @@ function App() {
    * @returns true si le monstre à été ajouté
    */
   const ajouterMonstre = (monstre : IMonstre) => {
-    var copieMonstres = [...monstres];
-    copieMonstres?.push(monstre);
-    setMonstres(copieMonstres);
-    return true;
+    
+    return axios.post("https://donjonmonstresapi.netlify.app/monstre/ajouter",
+      {
+        "monstre" : {
+          "nom" : monstre.nom,
+          "raceId" : monstre.raceId,
+          "niveau" : monstre.niveau,
+          "age" : monstre.age,
+          "dateNaissance" : monstre.dateNaissance,
+          "aventuriersVaincus" : monstre.aventuriersVaincus
+        }
+      }).then((resultat) => {
+        if(resultat.data.erreur !== null && resultat.data.erreur !== undefined) {
+          console.error(resultat.data.erreur);
+          return false;
+        }
+
+        var copieMonstres = [...monstres];
+        copieMonstres?.push(resultat.data.element);
+        setElements(copieMonstres);
+        return true;
+
+      }).catch((erreur) => {
+        console.error(erreur);
+        return false;
+      })
+
   }
 
   /**
@@ -251,27 +273,39 @@ function App() {
    * @returns si oui ou non le monstre à été modifié
    */
   const modifierMonstre = (monstre : IMonstre) => {
-    const monstreAModifier = monstres.find(monstreDuTableau => monstreDuTableau._id == monstre._id);
+    
+    return axios.put("https://donjonmonstresapi.netlify.app/monstre/miseAJour",
+    {
+      "monstre" : {
+        "_id" : monstre._id,
+        "nom" : monstre.nom,
+        "raceId" : monstre.raceId,
+        "niveau" : monstre.niveau,
+        "age" : monstre.age,
+        "dateNaissance" : monstre.dateNaissance,
+        "aventuriersVaincus" : monstre.aventuriersVaincus
+      }
+    }).then((reponse) => {
+      if(reponse.data.erreur !== null && reponse.data.erreur !== undefined) {
+        console.error(reponse.data.erreur);
+        return false;
+      }
 
-    if(monstreAModifier === undefined)
-      return false; // Monstre non trouvé
+      const monstreAModifier = monstres.find(monstreDuTableau => monstreDuTableau._id == monstre._id);
 
-    const nouveauMonstres = monstres?.filter(monstreDuTableau => monstreDuTableau._id !== monstre._id);
-    const monstreModifie = { 
-      _id: monstre._id, 
-      nom: monstre.nom, 
-      raceId: monstre.raceId, 
-      niveau: monstre.niveau, 
-      age: monstre.age, 
-      amisId: monstre.amisId, 
-      dateNaissance: monstre.dateNaissance, 
-      aventuriersVaincus: monstre.aventuriersVaincus 
-    };
+      if(monstreAModifier === undefined)
+        return false; // Monstre non trouvé
+  
+      const nouveauMonstres = monstres?.filter(monstreDuTableau => monstreDuTableau._id !== monstre._id);
+      nouveauMonstres?.push(monstre);
+      setElements(nouveauMonstres);
+  
+      return true;
 
-    nouveauMonstres?.push(monstreModifie);
-    setElements(nouveauMonstres);
-
-    return true
+    }).catch((erreur) => {
+      console.error(erreur);
+      return false;
+    });
   }
 
   /**
@@ -280,14 +314,27 @@ function App() {
    * @returns si oui ou non le monstre à été retiré
    */
   const retirerMonstre = (monstre : IMonstre) => {
-    const nouveauMonstres = monstres?.filter(monstreDuTableau => monstreDuTableau._id !== monstre._id);
+    
+    return axios.delete("https://donjonmonstresapi.netlify.app/monstre/supression/" + monstre._id)
+    .then((resultat) => {
+      if(resultat.data.erreur !== null && resultat.data.erreur !== undefined) {
+        console.error(resultat.data.erreur);
+        return false;
+      }
 
-    if (nouveauMonstres && nouveauMonstres.length !== monstres.length) {
-      setElements(nouveauMonstres);
-      return true; // Le monstre a été retiré avec succès
-    } else {
-      return false; // Le monstre n'a pas été trouvé dans la liste
-    }
+      const nouveauMonstres = monstres?.filter(monstreDuTableau => monstreDuTableau._id !== monstre._id);
+
+      if (nouveauMonstres && nouveauMonstres.length !== monstres.length) {
+        setMonstres(nouveauMonstres);
+        return true; // Le monstre a été retiré avec succès
+      } else {
+        return false; // Le monstre n'a pas été trouvé dans la liste
+      }
+
+    }).catch((erreur) => {
+        console.error(erreur);
+        return false;
+    });
   }
 
   /**

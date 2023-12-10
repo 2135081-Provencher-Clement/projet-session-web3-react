@@ -31,7 +31,7 @@ function ListeMonstre() {
            </Stack>
            <span>&nbsp;</span>
            <Typography variant="h6" textAlign="left">Monstres</Typography>
-           <Stack spacing={1} direction="column" divider={<Divider orientation="horizontal" flexItem />} paddingTop={3}>
+           <Stack spacing={1} direction="column" divider={<Divider orientation="horizontal" flexItem />} paddingTop={3} width={500}>
                {monstreItems}
            </Stack>
        </>
