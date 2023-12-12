@@ -53,7 +53,6 @@ function Race() {
             else    
             {
                 setRace(reponse.data.race);
-                console.log(reponse.data);
                 axios.get("https://donjonmonstresapi.netlify.app/element/id/" + reponse.data.race.elementId).then((reponseElement) => {
                     if(reponseElement.data.erreur !== null && reponseElement.data.erreur !== undefined) {
                         alert("Une erreur s'est produite lors de l'affichage de la race");
@@ -102,7 +101,7 @@ function Race() {
     }
 
     /**
-     * Supprime l'élément
+     * Supprime la race
      */
     const traitementSupprimerRace = async () => {
         if (race === null)
@@ -138,7 +137,7 @@ function Race() {
     }
 
      /**
-     * Assigne le nom de l'élément lors de la modification du nom
+     * Assigne le nom de la race lors de la modification du nom
      */
      const handleNomChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         if(race === undefined)

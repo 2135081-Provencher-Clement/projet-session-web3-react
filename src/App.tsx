@@ -17,6 +17,9 @@ import Race from './Race';
 import AjouterElement from './AjouterElement';
 import { CssBaseline } from '@mui/material';
 import AjouterRace from './AjouterRace';
+import Monstre from './Monstre';
+import AjouterMonstre from './AjouterMonstre';
+import 'react-datepicker/dist/react-datepicker.css';
 
 /**
  * Constexte du donjon, contient tous les informations du donjon
@@ -380,6 +383,8 @@ function App() {
           <Route path="/Race/:idRace" Component={Race}/>
           <Route path="/Race/Ajouter" Component={AjouterRace}/>
           <Route path="/Monstre" Component={ListeMonstre}/>
+          <Route path="/Monstre/:idMonstre" Component={Monstre}/>
+          <Route path="/Monstre/Ajouter" Component={AjouterMonstre}/>
         </Routes>
       </BrowserRouter>
     </DonjonContext.Provider>

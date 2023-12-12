@@ -20,12 +20,11 @@ export interface IMonstre {
     age : Number;
     amisId : String[];
     dateNaissance : Date;
-    aventuriersVaincus : [
+    aventuriersVaincus : 
         {
             nom : String;
             niveau : Number;
             rang : rangAventurier;
             classe : classeAventurier;
-        }
-    ];
+        }[];
 }

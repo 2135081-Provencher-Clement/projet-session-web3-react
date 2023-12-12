@@ -27,7 +27,7 @@ function ListeMonstre() {
            <Typography variant="h3">Liste des monstres</Typography>
            <Stack direction="row" spacing={20} padding={1} justifyContent="center">
                <NavLink to="/">Retour à l'Acceuil</NavLink>
-               <NavLink to="/Element/Ajouter">Ajouter</NavLink>
+               <NavLink to="/Monstre/Ajouter">Ajouter</NavLink>
            </Stack>
            <span>&nbsp;</span>
            <Typography variant="h6" textAlign="left">Monstres</Typography>

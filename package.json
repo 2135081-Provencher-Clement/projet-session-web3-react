@@ -15,13 +15,16 @@
     "@fontsource/roboto": "^5.0.8",
     "@mui/icons-material": "^5.14.19",
     "@mui/material": "^5.14.20",
+    "@mui/x-data-grid": "^6.18.4",
     "axios": "^1.6.2",
     "react": "^18.2.0",
+    "react-datepicker": "^4.24.0",
     "react-dom": "^18.2.0",
     "react-router-dom": "^6.20.1"
   },
   "devDependencies": {
     "@types/react": "^18.2.37",
+    "@types/react-datepicker": "^4.19.4",
     "@types/react-dom": "^18.2.15",
     "@types/react-router-dom": "^5.3.3",
     "@typescript-eslint/eslint-plugin": "^6.10.0",
