@@ -1,30 +1,12 @@
-# React + TypeScript + Vite
+Salut étienne,
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Je n'ai pas fait d'internationalisation,
+Je n'ai pas non plus fait d'authentification
+Et surtout, je n'ai pas validé chaque champs 
+(quand il y a une erreur, l'ajout/modification est empêché et l'usager est informé
+mais le message fourni n'est pas préscis sur l'origine de l'erreur)
 
-Currently, two official plugins are available:
+De plus, il n'est pas possible d'ajouter ou de modifier des aventuriers vaincus par les monstres
+Il n'est pas non plus possible de modifier la date de naissance d'un monstre (On nait juste une fois, et c'est pour de bon !)
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
-
-## Expanding the ESLint configuration
-
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
-
-- Configure the top-level `parserOptions` property like this:
-
-```js
-export default {
-  // other rules...
-  parserOptions: {
-    ecmaVersion: 'latest',
-    sourceType: 'module',
-    project: ['./tsconfig.json', './tsconfig.node.json'],
-    tsconfigRootDir: __dirname,
-  },
-}
-```
-
-- Replace `plugin:@typescript-eslint/recommended` to `plugin:@typescript-eslint/recommended-type-checked` or `plugin:@typescript-eslint/strict-type-checked`
-- Optionally add `plugin:@typescript-eslint/stylistic-type-checked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and add `plugin:react/recommended` & `plugin:react/jsx-runtime` to the `extends` list
+url en prod : https://monstres-dans-donjon.netlify.app
