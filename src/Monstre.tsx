@@ -54,6 +54,7 @@ function Monstre() {
             else    
             {
                 setMonstre(reponse.data.monstre);
+                setRowSelectionModelAmis(reponse.data.monstre.amisId.map((id : String) => {return id.toString()}))
                 axios.get("https://donjonmonstresapi.netlify.app/race/id/" + reponse.data.monstre.raceId).then((reponseRace) => {
                     if(reponseRace.data.erreur !== null && reponseRace.data.erreur !== undefined) {
                         alert("Une erreur s'est produite lors de l'affichage du monstre");
@@ -206,10 +207,16 @@ function Monstre() {
      * @param nouvelleListeAmis la nouvelle liste d'amis
      */
     const handleSelectionAmisChange = (nouvelleListeAmis : GridRowSelectionModel) => {
+        setRowSelectionModelAmis(nouvelleListeAmis);
 
         const ids = nouvelleListeAmis.map((id) => id.toString());
         setMonstre({ ...monstre!, amisId: ids});
     }
+
+    /**
+     * Indique à la grille quels amis sont sélectionnés
+     */
+    const [rowSelectionModelAmis, setRowSelectionModelAmis] = React.useState<GridRowSelectionModel>([]);
 
     /**
      * Les rangées pour le tableau d'amis
@@ -282,7 +289,7 @@ function Monstre() {
                 <Stack>
                     <Typography textAlign="start">Amis du monstre</Typography>
                     <div style={{ height: 400, width: '100%' }}>
-                        <DataGrid checkboxSelection onRowSelectionModelChange={handleSelectionAmisChange} rows={amiPossiblesRows} columns={amiPossiblesColumns}/>
+                        <DataGrid checkboxSelection onRowSelectionModelChange={handleSelectionAmisChange} rows={amiPossiblesRows} columns={amiPossiblesColumns} rowSelectionModel={rowSelectionModelAmis}/>
                     </div>
                 </Stack>
                 <Button onClick={traitementModifierMonstre}>Modifier</Button>
