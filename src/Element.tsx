@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import { NavLink, useNavigate, useParams } from "react-router-dom"
-import { IElement } from "./modeles/IElement";
-import { Button, Card, Dialog, Stack, TextField, Typography } from "@mui/material";
+import { Button, Dialog, Stack, TextField, Typography } from "@mui/material";
 import axios from "axios";
 import { DonjonContext } from "./App";
 import { IDonjonContext } from "./modeles/IDonjonContext";

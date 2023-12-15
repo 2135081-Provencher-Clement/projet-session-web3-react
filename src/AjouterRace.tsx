@@ -58,14 +58,14 @@ function AjouterRace() {
     /**
      * Change l'élément lors d'un changement de sélection du combobox
      */
-    const handleChangerElement = (event: SelectChangeEvent<String>, child: React.ReactNode) => {
+    const handleChangerElement = (event: SelectChangeEvent<String>) => {
         setElementId(event.target.value);
     }
 
     /**
      * Change la reproductio nlors d'un changement du switch
      */
-    const handleChangerReproduction = (event: React.ChangeEvent<HTMLInputElement>, checked: boolean) => {
+    const handleChangerReproduction = (event: React.ChangeEvent<HTMLInputElement>) => {
         setReproduction(event.target.checked);
     }
 

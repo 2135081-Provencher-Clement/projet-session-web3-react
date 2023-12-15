@@ -242,6 +242,8 @@ function App() {
    */
   const ajouterMonstre = (monstre : IMonstre) => {
     
+  console.log(monstre.amisId);
+
     return axios.post("https://donjonmonstresapi.netlify.app/monstre/ajouter",
       {
         "monstre" : {
@@ -249,6 +251,7 @@ function App() {
           "raceId" : monstre.raceId,
           "niveau" : monstre.niveau,
           "age" : monstre.age,
+          "amisId" : monstre.amisId,
           "dateNaissance" : monstre.dateNaissance,
           "aventuriersVaincus" : monstre.aventuriersVaincus
         }
@@ -259,8 +262,8 @@ function App() {
         }
 
         var copieMonstres = [...monstres];
-        copieMonstres?.push(resultat.data.element);
-        setElements(copieMonstres);
+        copieMonstres?.push(resultat.data.monstre);
+        setMonstres(copieMonstres);
         return true;
 
       }).catch((erreur) => {
@@ -285,6 +288,7 @@ function App() {
         "raceId" : monstre.raceId,
         "niveau" : monstre.niveau,
         "age" : monstre.age,
+        "amisId" : monstre.amisId,
         "dateNaissance" : monstre.dateNaissance,
         "aventuriersVaincus" : monstre.aventuriersVaincus
       }
@@ -301,7 +305,7 @@ function App() {
   
       const nouveauMonstres = monstres?.filter(monstreDuTableau => monstreDuTableau._id !== monstre._id);
       nouveauMonstres?.push(monstre);
-      setElements(nouveauMonstres);
+      setMonstres(nouveauMonstres);
   
       return true;
 

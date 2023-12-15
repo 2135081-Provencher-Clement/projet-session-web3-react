@@ -1,10 +1,9 @@
-import { Button, FormControl, FormControlLabel, InputLabel, MenuItem, Select, SelectChangeEvent, Stack, Switch, TextField, Typography } from "@mui/material";
+import { Button, FormControl, InputLabel, MenuItem, Select, SelectChangeEvent, Stack, TextField, Typography } from "@mui/material";
 import { useState } from "react";
 import { NavLink } from "react-router-dom";
 import { DonjonContext } from "./App";
 import { IDonjonContext } from "./modeles/IDonjonContext";
 import React from "react";
-import { classeAventurier, rangAventurier } from "./modeles/IMonstre";
 import DatePicker from 'react-datepicker';
 import { DataGrid, GridRowSelectionModel, GridRowsProp } from '@mui/x-data-grid';
 
@@ -47,16 +46,6 @@ function AjouterMonstre() {
     const [dateNaissance, setDateNaissance] = useState( new Date());
 
     /**
-     * La liste des aventuriers vaincus par le monstre
-     */
-    const [aventuriersVaincus, setAventuriersVaincus] = useState<{
-        nom : String;
-        niveau : Number;
-        rang : rangAventurier;
-        classe : classeAventurier;
-    }[]>([]);
-
-    /**
      * Assigne le nom de la race lors de la modification du nom
      */
     const handleNomChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -67,6 +56,7 @@ function AjouterMonstre() {
      * Ajoute le monstre
      */
     const handleAjouterMonstre = async () => {
+
         const resultat = await ajouterMonstre({
              _id : "" , 
              nom : nomMonstre, 
@@ -75,7 +65,7 @@ function AjouterMonstre() {
              age : age,
              amisId : amis,
              dateNaissance : dateNaissance,
-             aventuriersVaincus : aventuriersVaincus
+             aventuriersVaincus : []
         });
 
         if (resultat) {
@@ -85,7 +75,6 @@ function AjouterMonstre() {
             setAge(1);
             setAmis([]);
             setDateNaissance(new Date());
-            setAventuriersVaincus([]);
         }
         else {
             alert("Une erreur est survenue lors de l'ajout du monstre");
@@ -95,7 +84,7 @@ function AjouterMonstre() {
     /**
      * Change la race lors d'un changement de sélection du combobox
      */
-    const handleChangerElement = (event: SelectChangeEvent<String>, child: React.ReactNode) => {
+    const handleChangerRace = (event: SelectChangeEvent<String>) => {
         setRaceId(event.target.value);
     }
 
@@ -116,7 +105,7 @@ function AjouterMonstre() {
         const ageNombre = parseInt(event.target.value, 10);
 
         if(!isNaN(ageNombre))
-            setNiveau(ageNombre);
+            setAge(ageNombre);
     }
 
     /**
@@ -124,7 +113,7 @@ function AjouterMonstre() {
      */
     const handleDateChange = (date: Date) => {
         setDateNaissance(date);
-      };
+    };
 
     /**
      * Les races sous un format qui peut peupler la combobox
@@ -144,7 +133,15 @@ function AjouterMonstre() {
         { field: 'niveau', headerName: 'Niveau', width: 100 },
       ];
 
-    const [rowSelectionModel, setRowSelectionModel] = React.useState<GridRowSelectionModel>([]);
+    /**
+     * Gère le changement de la liste d'amis
+     * @param nouvelleListeAmis la nouvelle liste d'amis
+     */
+    const handleSelectionAmisChange = (nouvelleListeAmis : GridRowSelectionModel) => {
+
+        const ids = nouvelleListeAmis.map((id) => id.toString());
+        setAmis(ids);
+    }
 
     return (
         <>
@@ -156,8 +153,8 @@ function AjouterMonstre() {
                     <TextField id="nom-monstre" helperText="Nom du monstre" required={true} fullWidth={true} variant="filled" onChange={handleNomChange} value={nomMonstre}/> 
                 </FormControl>
                 <FormControl>
-                    <InputLabel id="element">Élément</InputLabel>
-                    <Select labelId="element" id="element-select" value={raceId} label="Élément" onChange={handleChangerElement}>
+                    <InputLabel id="race">Race</InputLabel>
+                    <Select labelId="race" id="race-select" value={raceId} label="Race" onChange={handleChangerRace}>
                         {itemsRaces}
                     </Select>
                 </FormControl>
@@ -174,8 +171,7 @@ function AjouterMonstre() {
                 <Stack>
                     <Typography textAlign="start">Amis du monstre</Typography>
                     <div style={{ height: 400, width: '100%' }}>
-                        <DataGrid checkboxSelection onRowSelectionModelChange={(newRowSelectionModel) => {
-          setRowSelectionModel(newRowSelectionModel);}} rows={amiRows} columns={amiColumns}/>
+                        <DataGrid checkboxSelection onRowSelectionModelChange={handleSelectionAmisChange} rows={amiRows} columns={amiColumns}/>
                     </div>
                 </Stack>
                 <Button onClick={handleAjouterMonstre}>Ajouter</Button>

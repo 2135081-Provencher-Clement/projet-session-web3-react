@@ -5,7 +5,6 @@ import { NavLink, useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
 import { IRace } from "./modeles/IRace";
 import { Button, Dialog, FormControl, FormControlLabel, InputLabel, MenuItem, Select, SelectChangeEvent, Stack, Switch, TextField, Typography } from "@mui/material";
-import { IElement } from "./modeles/IElement";
 
 function Race() {
 
@@ -120,7 +119,7 @@ function Race() {
     /**
      * Change l'élément lors d'un changement de sélection du combobox
      */
-    const handleChangerElement = (event: SelectChangeEvent<String>, child: React.ReactNode) => {
+    const handleChangerElement = (event: SelectChangeEvent<String>) => {
         if(race === undefined)
             return;
 
@@ -149,7 +148,7 @@ function Race() {
     /**
      * Change la reproduction lors d'un changement du switch
      */
-    const handleChangerReproduction = (event: React.ChangeEvent<HTMLInputElement>, checked: boolean) => {
+    const handleChangerReproduction = (event: React.ChangeEvent<HTMLInputElement>) => {
         if(race === undefined)
             return;
         

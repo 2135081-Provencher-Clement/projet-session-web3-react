@@ -4,8 +4,9 @@ import { IDonjonContext } from "./modeles/IDonjonContext";
 import { NavLink, useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
 import { IRace } from "./modeles/IRace";
-import { Button, Dialog, FormControl, FormControlLabel, InputLabel, MenuItem, Select, SelectChangeEvent, Stack, Switch, TextField, Typography } from "@mui/material";
+import { Button, Dialog, FormControl, InputLabel, MenuItem, Select, SelectChangeEvent, Stack, TextField, Typography } from "@mui/material";
 import { IMonstre } from "./modeles/IMonstre";
+import { DataGrid, GridRowSelectionModel, GridRowsProp } from "@mui/x-data-grid";
 
 function Monstre() {
 
@@ -19,7 +20,7 @@ function Monstre() {
     /**
      * Récupère les informations nécéssaires du contexte
      */
-    const { modifierMonstre, retirerMonstre, races } = React.useContext(DonjonContext) as IDonjonContext;
+    const { modifierMonstre, retirerMonstre, races, monstres } = React.useContext(DonjonContext) as IDonjonContext;
 
     /**
      * Indique si le message de confirmation de suppression est ouvert
@@ -120,7 +121,7 @@ function Monstre() {
     /**
      * Change la race lors d'un changement de sélection du combobox
      */
-    const handleChangerRace = (event: SelectChangeEvent<String>, child: React.ReactNode) => {
+    const handleChangerRace = (event: SelectChangeEvent<String>) => {
         if(monstre === undefined)
             return;
 
@@ -146,11 +147,82 @@ function Monstre() {
         setMonstre({...monstre!, nom : event.target.value});
     }
 
+    /**
+     * Les rangées pour le tableau d'amis
+     */
+    const amiRows : GridRowsProp = monstres.filter((amiPossible) => monstre?.amisId.includes(amiPossible._id)).map((monstre) => {return {id: monstre._id, nom : monstre.nom, niveau : monstre.niveau}});
 
     /**
-     * Les éléments sous un format qui peut peupler la combobox
+     * Les races sous un format qui peut peupler la combobox
      */
-    const itemsElement = races.map((race) => <MenuItem key={race._id.valueOf()} value={race._id.valueOf()}>{race.nom}</MenuItem>)
+    const itemsRaces = races.map((race) => <MenuItem key={race._id.valueOf()} value={race._id.valueOf()}>{race.nom}</MenuItem>);
+
+    /**
+     * Les colones pour le tableau d'amis
+     */
+    const amiColumns = [
+        { field: 'nom', headerName: 'Nom', width: 700 },
+        { field: 'niveau', headerName: 'Niveau', width: 100 },
+      ];
+
+
+    /**
+     * Assigne le niveau du monstre lors de la modification du niveau
+     */
+    const handleNiveauChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        const niveauNombre = parseInt(event.target.value, 10);
+
+        if(!isNaN(niveauNombre))
+            setMonstre({ ...monstre!, niveau: niveauNombre})
+    }
+
+    /**
+     * Assigne l'âge du monstre lors de la modification da l'âge
+     */
+    const handleAgeChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        const ageNombre = parseInt(event.target.value, 10);
+
+        if(!isNaN(ageNombre))
+            setMonstre({ ...monstre!, age : ageNombre})
+    }
+
+    /**
+     * Les rangées pour le tableau d'aventuriers
+     */
+    const aventuriersRows : GridRowsProp | undefined = monstre?.aventuriersVaincus.map((aventurier) => {return {id: aventurier.nom + aventurier.rang + aventurier.classe, nom : aventurier.nom, niveau : aventurier.niveau, rang : aventurier.rang, classe : aventurier.classe}});
+
+    /**
+     * Les colones pour le tableau d'aventuriers
+     */
+    const aventuriersColumns = [
+        { field: 'nom', headerName: 'Nom', width: 300 },
+        { field: 'niveau', headerName: 'Niveau', width: 100 },
+        { field: 'classe', headerName: 'Classe', width: 200 },
+        { field: 'rang', headerName: 'Rang', width: 200 }
+      ];
+
+    /**
+     * Gère le changement de la liste d'amis
+     * @param nouvelleListeAmis la nouvelle liste d'amis
+     */
+    const handleSelectionAmisChange = (nouvelleListeAmis : GridRowSelectionModel) => {
+
+        const ids = nouvelleListeAmis.map((id) => id.toString());
+        setMonstre({ ...monstre!, amisId: ids});
+    }
+
+    /**
+     * Les rangées pour le tableau d'amis
+     */
+    const amiPossiblesRows : GridRowsProp = monstres.map((monstre) => {return {id: monstre._id, nom : monstre.nom, niveau : monstre.niveau}});
+
+    /**
+     * Les colones pour le tableau d'amis
+     */
+    const amiPossiblesColumns = [
+        { field: 'nom', headerName: 'Nom', width: 300 },
+        { field: 'niveau', headerName: 'Niveau', width: 100 },
+      ];
 
     return (
         <>
@@ -160,24 +232,61 @@ function Monstre() {
                 <NavLink to="/Monstre">Retour aux monstres</NavLink>
 
                 <Typography textAlign="start">{"race : " + race?.nom}</Typography>
+                <Typography textAlign="start">{"niveau : " + monstre?.niveau}</Typography>
+                <Typography textAlign="start">{"age : " + monstre?.age}</Typography>
+                <Typography textAlign="start">{"date de naissance : " + (monstre ? (monstre?.dateNaissance.toString()).split('T')[0] : "Date inconnue")}</Typography>
+                
+                { monstre !== null && monstre.amisId.length > 0 ?
+                <Stack>
+                    <Typography textAlign="start">Amis du monstre</Typography>
+                    <div style={{ height: 300, width: '100%' }}>
+                        <DataGrid rows={amiRows} columns={amiColumns}/>
+                    </div>
+                </Stack>
+                :
+                <Typography textAlign="start">Ce monstre n'a aucun ami</Typography>
+                }
+
+                { monstre !== null && monstre.aventuriersVaincus.length > 0 ?
+                <Stack>
+                    <Typography textAlign="start">Aventuriers vaincus par le monstre</Typography>
+                    { aventuriersRows !== undefined && <div style={{ height: 300, width: '100%' }}>
+                        <DataGrid rows={aventuriersRows!} columns={aventuriersColumns}/>
+                    </div>
+                    }
+                </Stack>
+                :
+                <Typography textAlign="start">Ce monstre n'a vaincu aucun aventurier</Typography>
+                }
 
                 <Button onClick={handleModifierMontre}>Modifier</Button>
                 <Button onClick={handleSupprimerMonstre}>Supprimer</Button>
             </Stack>
             { modificationActivee && 
                 <Stack spacing={5} paddingTop={10}>
-                    <Typography variant="h4">Modifier</Typography>
-                    <FormControl>
-                        <TextField id="nom-monstre" helperText="Nom du monstre" required={true} fullWidth={true} variant="filled" onChange={handleNomChange} value={monstre?.nom}/> 
-                    </FormControl>
-                    <FormControl>
-                        <InputLabel id="race">Race</InputLabel>
-                        <Select labelId="race" id="race-select" value={monstre?.raceId} label="Race" onChange={handleChangerRace}>
-                            {itemsElement}
-                        </Select>
-                    </FormControl>
-                    <Button onClick={traitementModifierMonstre}>Modifier</Button>
+                <FormControl>
+                    <TextField id="nom-monstre" helperText="Nom du monstre" required={true} fullWidth={true} variant="filled" onChange={handleNomChange} value={monstre?.nom}/> 
+                </FormControl>
+                <FormControl>
+                <InputLabel id="race">Race</InputLabel>
+                    <Select labelId="race" id="race-select" value={race?._id} label="Race" onChange={handleChangerRace}>
+                        {itemsRaces}
+                    </Select>
+                </FormControl>
+                <FormControl>
+                    <TextField id="niveau-monstre" helperText="Niveau du monstre" required={true} type="number" variant="filled" onChange={handleNiveauChange} value={monstre?.niveau}/> 
+                </FormControl>
+                <FormControl>
+                    <TextField id="age-monstre" helperText="Âge du monstre" required={true} type="number" variant="filled" onChange={handleAgeChange} value={monstre?.age}/> 
+                </FormControl>
+                <Stack>
+                    <Typography textAlign="start">Amis du monstre</Typography>
+                    <div style={{ height: 400, width: '100%' }}>
+                        <DataGrid checkboxSelection onRowSelectionModelChange={handleSelectionAmisChange} rows={amiPossiblesRows} columns={amiPossiblesColumns}/>
+                    </div>
                 </Stack>
+                <Button onClick={traitementModifierMonstre}>Modifier</Button>
+            </Stack>
             }
             <Dialog open={dialogConfirmationSuppressionOuvert}>
                 <Typography sx={{padding : 5}}>Êtes-vous certain de vouloir supprimer ce monstre ?</Typography>
